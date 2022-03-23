@@ -1,0 +1,35 @@
+version: '3'
+services:
+  app:
+      build: .
+      container_name: bookstore_app
+      volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules/
+      links:
+        - redis
+      ports:
+        - 4000:4000
+      environment:
+        - REDIS_URL=redis://cache
+        - NODE_ENV=development
+        - PORT=4000
+      command: npm start
+  redis:
+    container_name: redis
+    image: redis
+    hostname: redis
+    expose:
+      - 6379
+    command: redis-server
+
+  # redis-commander:
+  #   container_name: redis-commander
+  #   hostname: redis-commander
+  #   image: rediscommander/redis-commander:latest
+  #   restart: always
+  #   environment:
+  #   - REDIS_HOSTS=local:redis:6379
+  #   ports:
+  #   - "8081:8081"
+  
